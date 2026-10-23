@@ -31,7 +31,7 @@ class _WebViewAppState extends State<WebViewApp> {
       final AndroidWebViewController androidController =
           controller.platform as AndroidWebViewController;
       
-      androidController.setOnShowFilePicker((params) async {
+      androidController.setOnShowFileChooser((params) async {
         try {
           final FilePickerResult? result = await FilePicker.platform.pickFiles();
           if (result != null && result.files.single.path != null) {
