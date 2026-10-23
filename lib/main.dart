@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart'; // Android specific support ke liye
 
 void main() {
   runApp(const MaterialApp(
@@ -22,24 +21,9 @@ class _WebViewAppState extends State<WebViewApp> {
   @override
   void initState() {
     super.initState();
-    
-    // WebView Controller initialization
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {},
-          onWebResourceError: (WebResourceError error) {},
-        ),
-      )
       ..loadRequest(Uri.parse('https://ai-study-assistant-zrey.onrender.com/'));
-
-    // Cache aur DOM storage fix for Android (ERR_CACHE_MISS error hatane ke liye)
-    if (controller.platform is AndroidWebViewController) {
-      (controller.platform as AndroidWebViewController)
-          .setDomStorageEnabled(true);
-    }
   }
 
   @override
