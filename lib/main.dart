@@ -1,46 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart'; // Android specific support ke liye
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(const MaterialApp(
+    home: WebViewApp(),
+    debugShowCheckedModeBanner: false,
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class WebViewApp extends StatefulWidget {
+  const WebViewApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'AI Study Assistant',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const WebAppScreen(),
-    );
-  }
+  State<WebViewApp> createState() => _WebViewAppState();
 }
 
-class WebAppScreen extends StatefulWidget {
-  const WebAppScreen({super.key});
-
-  @override
-  State<WebAppScreen> createState() => _WebAppScreenState();
-}
-
-class _WebAppScreenState extends State<WebAppScreen> {
+class _WebViewAppState extends State<WebViewApp> {
   late final WebViewController controller;
 
   @override
   void initState() {
     super.initState();
+    
+    // WebView Controller initialization
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(
-        Uri.parse('https://ai-study-assistant-zrey.onrender.com'),
-      );
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onWebResourceError: (WebResourceError error) {},
+        ),
+      )
+      ..loadRequest(Uri.parse('https://ai-study-assistant-zrey.onrender.com/'));
+
+    // Cache aur DOM storage fix for Android (ERR_CACHE_MISS error hatane ke liye)
+    if (controller.platform is AndroidWebViewController) {
+      (controller.platform as AndroidWebViewController)
+          .setDomStorageEnabled(true);
+    }
   }
 
   @override
