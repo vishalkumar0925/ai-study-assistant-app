@@ -11,7 +11,6 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   webview_flutter: ^4.14.1
-  webview_flutter_android: ^4.14.1
 
 dev_dependencies:
   flutter_test:
@@ -20,44 +19,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-Step 2: lib/main.dart ka code update karein
-Apni lib/main.dart file ka poora code hata kar yeh 100% error-free code paste karke Save (Ctrl + S) kar dein:
-
-Dart
-import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-
-void main() {
-  runApp(const MaterialApp(
-    home: WebViewApp(),
-    debugShowCheckedModeBanner: false,
-  ));
-}
-
-class WebViewApp extends StatefulWidget {
-  const WebViewApp({super.key});
-
-  @override
-  State<WebViewApp> createState() => _WebViewAppState();
-}
-
-class _WebViewAppState extends State<WebViewApp> {
-  late final WebViewController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse('https://ai-study-assistant-zrey.onrender.com/'));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: WebViewWidget(controller: controller),
-      ),
-    );
-  }
-}
