@@ -10,8 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  webview_flutter: ^4.14.1
-  webview_flutter_android: ^4.14.1
+  webview_flutter: ^4.10.0
+  webview_flutter_android: ^4.0.0
   file_picker: ^8.1.2
 
 dev_dependencies:
