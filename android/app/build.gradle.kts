@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.ai_study_assistant_app"
-        minSdk = 21
+        minSdk = 24
         targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -38,4 +38,5 @@ android {
 flutter {
     source = "../.."
 }
+
 
