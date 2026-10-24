@@ -29,11 +29,9 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-
-      - name: Install Android SDK 36 and Accept Licenses
-        run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+        with:
+          platforms: android-36
+          build-tools: 36.0.0
 
       - name: Install dependencies
         run: flutter pub get
