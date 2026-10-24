@@ -39,8 +39,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build APK
-        run: flutter build apk --release
+      - name: Build APK with Gradle Stacktrace
+        run: |
+          cd android
+          ./gradlew assembleRelease --stacktrace --info
+          cd ..
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
