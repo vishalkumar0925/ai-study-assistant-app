@@ -23,26 +23,34 @@ class _WebViewAppState extends State<WebViewApp> {
   @override
   void initState() {
     super.initState();
-    controller = WebViewController()
+
+    final WebViewController webViewController = WebViewController();
+
+    webViewController
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse('https://ai-study-assistant-zrey.onrender.com/'));
 
-    if (controller.platform is AndroidWebViewController) {
-      final AndroidWebViewController androidController =
-          controller.platform as AndroidWebViewController;
+    if (webViewController.platform is AndroidWebViewController) {
+      final dynamic androidController = webViewController.platform;
       
-      androidController.setOnShowFileChooser((params) async {
-        try {
-          final FilePickerResult? result = await FilePicker.platform.pickFiles();
-          if (result != null && result.files.single.path != null) {
-            return [result.files.single.path!];
+      try {
+        androidController.setOnShowFileChooser((params) async {
+          try {
+            final FilePickerResult? result = await FilePicker.platform.pickFiles();
+            if (result != null && result.files.single.path != null) {
+              return [result.files.single.path!];
+            }
+          } catch (e) {
+            debugPrint("File picker error: $e");
           }
-        } catch (e) {
-          debugPrint("File picker error: $e");
-        }
-        return [];
-      });
+          return [];
+        });
+      } catch (e) {
+        debugPrint("Set show file chooser error: $e");
+      }
     }
+
+    controller = webViewController;
   }
 
   @override
