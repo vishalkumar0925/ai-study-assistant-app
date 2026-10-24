@@ -36,14 +36,14 @@ jobs:
       - name: Auto Accept Licenses
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
+      - name: Make Gradlew Executable
+        run: chmod +x android/gradlew
+
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build APK with Gradle Stacktrace
-        run: |
-          cd android
-          ./gradlew assembleRelease --stacktrace --info
-          cd ..
+      - name: Build APK
+        run: flutter build apk --release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
