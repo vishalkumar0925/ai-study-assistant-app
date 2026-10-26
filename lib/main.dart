@@ -33,7 +33,10 @@ class _WebViewAppState extends State<WebViewApp> {
       
       androidController.setOnShowFileSelector((params) async {
         try {
-          final FilePickerResult? result = await FilePicker.platform.pickFiles();
+          final FilePickerResult? result = await FilePicker.platform.pickFiles(
+            type: FileType.custom,
+            allowedExtensions: ['pdf'],
+          );
           if (result != null && result.files.single.path != null) {
             return [result.files.single.path!];
           }
