@@ -39,14 +39,23 @@ class _WebViewAppState extends State<WebViewApp> {
           );
           if (result != null && result.files.single.path != null) {
             String filePath = result.files.single.path!;
+            String fileName = result.files.single.name;
             
-            // Web app ke file input par change event trigger karne ke liye JavaScript
+            // Smart JavaScript: File ka naam bhi dikhayega aur input event bhi trigger karega
             controller.runJavaScript("""
-              const fileInput = document.querySelector('input[type="file"]');
-              if (fileInput) {
-                const event = new Event('change', { bubbles: true });
-                fileInput.dispatchEvent(event);
-              }
+              setTimeout(() => {
+                const allElements = document.querySelectorAll('*');
+                for (let el of allElements) {
+                  if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3 && el.innerText.trim() === 'No file selected') {
+                    el.innerText = '$fileName';
+                    break;
+                  }
+                }
+                const fileInput = document.querySelector('input[type="file"]');
+                if (fileInput) {
+                  fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+              }, 500);
             """);
             
             return [filePath];
