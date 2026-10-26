@@ -1,10 +1,10 @@
-﻿name: Build APK
+name: Build Release APK
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -23,30 +23,25 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.x'
+          flutter-version: '3.29.0'
           channel: 'stable'
-          cache: true
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: 'platforms;android-36 build-tools;36.0.0 cmdline-tools;latest'
-          accept-android-sdk-licenses: true
-
-      - name: Auto Accept Licenses
-        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
-      - name: Make Gradlew Executable
-        run: chmod +x android/gradlew
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build APK Verbose
-        run: flutter build apk --release --verbose
+      - name: Build APK with Gradle
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
+
+      - name: Copy APK to standard output path
+        run: |
+          mkdir -p build/app/outputs/flutter-apk/
+          cp android/app/build/outputs/apk/release/app-release.apk build/app/outputs/flutter-apk/app-release.apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-release          
+          name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
