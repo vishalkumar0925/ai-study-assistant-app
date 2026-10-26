@@ -38,7 +38,14 @@ class _WebViewAppState extends State<WebViewApp> {
             allowedExtensions: ['pdf'],
           );
           if (result != null && result.files.single.path != null) {
-            return [result.files.single.path!];
+            String filePath = result.files.single.path!;
+            String fileName = result.files.single.name;
+            
+            controller.runJavaScript(
+              "const textElement = document.querySelector('p, span, div'); if(textElement) { textElement.innerText = '$fileName'; }"
+            );
+            
+            return [filePath];
           }
         } catch (e) {
           debugPrint("File picker error: $e");
